@@ -1,0 +1,11 @@
+[Unit]
+Description=Example Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/SeshCord/backend
+Type=simple
+PIDFile=/var/run/seshcord-backend.pid
+
+[Install]
+WantedBy=multi-user.target
