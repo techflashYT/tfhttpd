@@ -1,7 +1,12 @@
 {
 	"files.associations": {
+		"*.embeddedhtml": "html",
 		"endian.h": "c",
 		"string.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"things.h": "c",
+		"stdbool.h": "c",
+		"stdint.h": "c",
+		"pages.h": "c"
 	}
 }

@@ -1,18 +1,32 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <things.h>
+#include <stdint.h>
+#include "pages.h"
+#include <stdbool.h>
 HttpRequest  *req;
 HttpResponse *res;
+
+static bool pageMatches(int i) {
+	if (strcmp(req->method, pages[i].method) != 0) {
+		return false;
+	}
+	if (strcmp(req->url, pages[i].url) != 0) {
+		return false;
+	}
+	return true;
+}
 void handleRequestLogic() {
-	// Modify this function to implement your desired logic
-	// This is a sample implementation that returns a fixed response
-	if (strcmp(req->url, "/v1/msg/s") == 0) {
-		res->status = "200 OK";
-		res->data = "Hello from TFHTTPd-0.0.1";
-	} else {
-		res->status = "404 Not Found";
-		res->data = "404 Not Found";
+	res->data = 0xDEADBEEF;
+	for (uint_fast8_t i = 0; i != numPages; i++) {
+		if (pageMatches(i)) {
+			pages[i].handler();
+		}
+	}
+	if (res->data == 0xDEADBEEF) {
+		// no pages matched, 404
+		res->status = RES_404;
+		res->data = RES_404;
 	}
 }
 
@@ -25,11 +39,12 @@ void generateResponse(char *responseStr) {
 		"HTTP/1.1 %s\r\n"
 		"Server: %s\r\n"
 		"\r\n"
-		"\r\n"
-		"%s",
+		"\r\n",
 
 		res->status,
-		servName,
-		res->data
+		servName
 	);
+	if (res->data != NULL) {
+		strcat(responseStr, res->data);
+	}
 }
