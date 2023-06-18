@@ -1,19 +1,36 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
-#include "pages.h"
 #include <stdbool.h>
+#include "pages.h"
 HttpRequest  *req;
 HttpResponse *res;
 
+
+// FIXME: This fixes a weird bug in my editor, as you can see stdbool.h is already present, so idk
+#ifndef bool
+#define bool _Bool
+#define true 1
+#define false 0
+#endif
 static bool pageMatches(int i) {
-	if (strcmp(req->method, pages[i].method) != 0) {
-		return false;
-	}
+	// Does the URL match?
 	if (strcmp(req->url, pages[i].url) != 0) {
+		// Nope, go to the next.
 		return false;
 	}
+	// Yes the URL does match, does this handler apply to any request method?
+	if (strcmp(pages[i].method, "ANY") == 0) {
+		// Yes, the URL matches, and this handler applies to any request method.
+		// Return true to signify that we found a match
+		return true;
+	}
+	// The URL does match, and this handler has a specific method tied to it.  Do the request and this method match?
+	if (strcmp(req->method, pages[i].method) != 0) {
+		// Nope, this doesn't match.  Go to the next handler.
+		return false;
+	}
+	// Yes, the URL and method match.
 	return true;
 }
 void handleRequestLogic() {
@@ -21,12 +38,13 @@ void handleRequestLogic() {
 	for (uint_fast8_t i = 0; i != numPages; i++) {
 		if (pageMatches(i)) {
 			pages[i].handler();
+			return;
 		}
 	}
 	if (res->data == 0xDEADBEEF) {
 		// no pages matched, 404
 		res->status = RES_404;
-		res->data = RES_404;
+		res->data = "{\n\t\"error\": {\n\t\t\"msg\": \"Not Found\",\n\t\t\"id\": 404\n\t}\n}";
 	}
 }
 
@@ -38,7 +56,6 @@ void generateResponse(char *responseStr) {
 	sprintf(responseStr, 
 		"HTTP/1.1 %s\r\n"
 		"Server: %s\r\n"
-		"\r\n"
 		"\r\n",
 
 		res->status,
