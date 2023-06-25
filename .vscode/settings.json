@@ -10,6 +10,8 @@
 		"pages.h": "c",
 		"stdio.h": "c",
 		"common.h": "c",
-		"stddef.h": "c"
+		"stddef.h": "c",
+		"commonsqlite.h": "c",
+		"json.h": "c"
 	}
 }

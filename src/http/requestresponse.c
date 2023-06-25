@@ -34,7 +34,9 @@ static bool pageMatches(int i) {
 	return true;
 }
 void handleRequestLogic() {
+	res->status = RES_404;
 	res->data = 0xDEADBEEF;
+	res->callback = NULL;
 	for (uint_fast8_t i = 0; i != numPages; i++) {
 		if (pageMatches(i)) {
 			pages[i].handler();
@@ -43,8 +45,7 @@ void handleRequestLogic() {
 	}
 	if (res->data == 0xDEADBEEF) {
 		// no pages matched, 404
-		res->status = RES_404;
-		res->data = "{\n\t\"error\": {\n\t\t\"msg\": \"Not Found\",\n\t\t\"id\": 404\n\t}\n}";
+		res->data = "{\"error\":{\"msg\":\"Not Found\",\"id\":404}}";
 	}
 }
 
@@ -63,5 +64,8 @@ void generateResponse(char *responseStr) {
 	);
 	if (res->data != NULL) {
 		strcat(responseStr, res->data);
+	}
+	if (res->callback != NULL) {
+		res->callback();
 	}
 }

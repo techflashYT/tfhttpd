@@ -14,6 +14,7 @@ typedef struct {
 typedef struct {
 	char *status;
 	char *data;
+	void (*callback)();
 } HttpResponse;
 
 extern HttpRequest  *req;

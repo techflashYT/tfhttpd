@@ -3,6 +3,7 @@ Description=Example Service
 After=network.target
 
 [Service]
+User=seshcord
 ExecStart=/usr/local/bin/SeshCord/backend
 Type=simple
 PIDFile=/var/run/seshcord-backend.pid

@@ -12,8 +12,7 @@ void parseRequest(const char *requestStr) {
 	char *protocolEnd   = strchr(protocolStart, '\r');
 	char *headersStart  = protocolEnd + 2;
 	char *headersEnd    = strstr(headersStart, "\r\n\r\n");
-	char *dataStart     = headersStart + 4;
-	char *dataEnd       = NULL; // will be filled in later
+	char *dataStart     = headersEnd + 4;
 
 	// Extract method
 	if (methodEnd != NULL) {
@@ -49,5 +48,15 @@ void parseRequest(const char *requestStr) {
 	}
 	else {
 		req->headers[0] = '\0';
+	}
+	char *dataEnd       = dataStart + atoi(getHeaderValue("Content-Length"));
+
+	// extract data
+	if (dataEnd != NULL) {
+		memcpy(req->data, dataStart, dataEnd - dataStart);
+		req->data[dataEnd - dataStart] = '\0';
+	}
+	else {
+		req->data[0] = '\0';
 	}
 }
