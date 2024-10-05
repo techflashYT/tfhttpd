@@ -49,7 +49,11 @@ void parseRequest(const char *requestStr) {
 	else {
 		req->headers[0] = '\0';
 	}
-	char *dataEnd       = dataStart + atoi(getHeaderValue("Content-Length"));
+	char *cntLen = getHeaderValue("Content-Length");
+	char *dataEnd = NULL;
+	if (cntLen != NULL) {
+		dataEnd = dataStart + atoi(getHeaderValue("Content-Length"));
+	}
 
 	// extract data
 	if (dataEnd != NULL) {
