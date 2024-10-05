@@ -13,12 +13,15 @@ void serverLoop() {
 	struct sockaddr_in serverAddr, clientAddr;
 	socklen_t addrSize = sizeof(clientAddr);
 	pthread_t thread;
+	int option = 1;
 
 	serverSock = socket(AF_INET, SOCK_STREAM, 0);
 	if (serverSock == -1) {
 		perror("Socket creation failed");
 		exit(1);
 	}
+
+	setsockopt(serverSock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(6969);
