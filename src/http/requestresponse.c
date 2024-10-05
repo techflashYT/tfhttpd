@@ -50,7 +50,7 @@ void handleRequestLogic() {
 	}
 	if (res->data == (void *)0xDEADBEEF) {
 		// no pages matched, 404
-		res->data = "{\"error\":{\"msg\":\"Not Found\",\"id\":404}}";
+		do404();
 	}
 }
 

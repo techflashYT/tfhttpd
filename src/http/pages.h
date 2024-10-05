@@ -13,6 +13,11 @@ static void badReq() {
 	res->data = "400 Bad Request\nYour client issued a malformed request.";
 }
 
+static void do404() {
+	res->status = RES_404;
+	res->data = "404 Not Found\nThe requested page was not found in the server.";
+}
+
 static page_t pages[] = {
 	{ "", "", NULL }
 };
