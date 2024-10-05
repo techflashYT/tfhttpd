@@ -37,8 +37,13 @@ void handleRequestLogic() {
 	res->status = RES_404;
 	res->data = 0xDEADBEEF;
 	res->callback = NULL;
-	for (uint_fast8_t i = 0; i != numPages; i++) {
-		if (pageMatches(i)) {
+	for (uint_fast8_t i = 0; ; i++) {
+		if (pages[i].url[0] == '\0' && pages[i].handler == NULL) {
+			// reached the end of the array
+			break;
+		}
+
+		else if (pageMatches(i)) {
 			pages[i].handler();
 			return;
 		}
