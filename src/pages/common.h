@@ -2,6 +2,12 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <things.h>
+
+/*
+ * some included predefined stuff for use in
+ * your pages.
+ */
+
 static char *resCodes[] = {
 	"200 OK",
 	"204 No Content",
