@@ -35,7 +35,7 @@ static bool pageMatches(int i) {
 }
 void handleRequestLogic() {
 	res->status = RES_404;
-	res->data = 0xDEADBEEF;
+	res->data = (void *)0xDEADBEEF;
 	res->callback = NULL;
 	for (uint_fast8_t i = 0; ; i++) {
 		if (pages[i].url[0] == '\0' && pages[i].handler == NULL) {
@@ -48,7 +48,7 @@ void handleRequestLogic() {
 			return;
 		}
 	}
-	if (res->data == 0xDEADBEEF) {
+	if (res->data == (void *)0xDEADBEEF) {
 		// no pages matched, 404
 		res->data = "{\"error\":{\"msg\":\"Not Found\",\"id\":404}}";
 	}
