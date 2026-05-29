@@ -1,13 +1,13 @@
 CC ?= gcc
 LD ?= gcc
-CFLAGS ?= -Ofast -g -fsanitize=address,undefined -Wall -Wextra -march=native -mtune=native
+CFLAGS ?= -Ofast -g -Wall -Wextra -march=native -mtune=native
 CFLAGS += -Isrc/include
-LDFLAGS ?= -lasan -lubsan
+LDFLAGS ?=
 
 OUT := bin/tfhttpd
 
-compile=$(subst .c,.o,$(subst src,build,$(shell find -O3 . -type f -name '*.c' | grep -v 'pages/v1')))
-includes=$(shell find -O3 . -type f -name '*.h')
+compile=$(subst .c,.o,$(subst src,build,$(shell find . -type f -name '*.c' | grep -v 'pages/v1')))
+includes=$(shell find . -type f -name '*.h')
 vpath %.c src
 
 
